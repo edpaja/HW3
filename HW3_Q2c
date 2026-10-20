@@ -1,0 +1,19 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import numpy.fft as fft
+
+dcv = np.loadtxt("/Users/edouardsavalle/Desktop/University/grad/Computational_Physics/HW3/HW3_Q2/dow.txt", unpack=True)
+
+c_k = fft.rfft(dcv)
+cutoff = int((len(c_k)/2+1)//10)
+c_segmented = np.concatenate((c_k[0:cutoff], np.zeros(len(c_k)-cutoff)))
+
+k = np.arange(0, len(c_k))
+day = np.arange(1, len(dcv)+1)
+
+fig, ax = plt.subplots(1, 1, figsize=(10, 5))
+ax.plot(k[1:], c_segmented[1:], "-")
+ax.set(xlabel="k", xlim=(0,(len(day)), ylabel="c_k", title="Power function")
+ax.legend(fontsize=7)
+ax.legend(); plt.tight_layout(); plt.savefig("/Users/edouardsavalle/Desktop/University/grad/Computational_Physics/HW3/HW3_Q2/dow_power_spectrum_segmented.png", dpi=130); plt.close()
+

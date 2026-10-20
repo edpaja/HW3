@@ -1,0 +1,26 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import numpy.fft as fft
+
+dcv = np.loadtxt("/Users/edouardsavalle/Desktop/University/grad/Computational_Physics/HW3/HW3_Q2/dow.txt", unpack=True)
+
+c_k = fft.rfft(dcv)
+print(len(c_k))
+cutoff = int(len(c_k)//10)
+c_segmented = np.concatenate((c_k[0:cutoff], np.zeros(len(c_k)-cutoff)))
+print(len(c_segmented))
+dcv_seg_10 = fft.irfft(c_segmented)
+print(len(dcv_seg_10))
+print(len(dcv))
+k = np.arange(0, len(c_k))
+day = np.arange(1, len(dcv)+1)
+
+fig, ax = plt.subplots(1, 1, figsize=(10, 5))
+ax.plot(day, dcv, color="green", linestyle="-", label="Full data")
+ax.plot(day, dcv_seg_10, color="blue", linestyle="-", label="First 10% of harmonics")
+ax.set(xlabel="days", xlim=(0, len(dcv)/2 + 1), ylabel="Daily Closing Value/$",
+       title="'Smoothed' graph of the Dow Daily Closing Value")
+ax.legend(loc="best")
+plt.tight_layout()
+plt.savefig("/Users/edouardsavalle/Desktop/University/grad/Computational_Physics/HW3/HW3_Q2/dow_inverserfft.png", dpi=130)
+plt.close()
